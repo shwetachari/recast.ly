@@ -3,7 +3,8 @@ class App extends React.Component {
     super(props)
     this.state = {
       videoList: [],
-      videoPlaying: {snippet: {title: '', description: ''}, id: {videoId: ''}}
+      videoPlaying: {snippet: {title: '', description: ''}, id: {videoId: ''}},
+      videoPlayingDetails: {snippet: {title: '', description: '', channelTitle: '', publishedAt: ''}, statistics: {viewCount: '', likeCount: '', dislikeCount: ''}}
     }
     this.search();
   }
@@ -19,7 +20,7 @@ class App extends React.Component {
         <div className="row">
           <div className="col-md-7">
             <VideoPlayer video={this.state.videoPlaying}/>
-            <VideoDetails video={this.state.videoPlaying}/>
+            <VideoDetails video={this.state.videoPlayingDetails}/>
           </div>
           <div className="col-md-5">
             <VideoList videos={this.state.videoList} func={this.handleClick} parent={this}/>
@@ -52,7 +53,7 @@ class App extends React.Component {
       });
     };
 
-    window.searchYouTube(dataObj, changeState);
+    window.searchYouTube(dataObj, changeState, 'search');
   }
 
   getDetails(id) {
@@ -60,14 +61,15 @@ class App extends React.Component {
       'id': id,
       'maxResults': '1',
       'key': window.YOUTUBE_API_KEY,
-      'part': 'snippet',
+      'part': 'snippet,contentDetails,statistics',
     }
 
     var renderDescription = (video) => {
-      console.log(video);
+      //console.log(video);
+      this.setState({videoPlayingDetails: video.items[0]});
     }
 
-    window.searchYouTube(dataObj, renderDescription);
+    window.searchYouTube(dataObj, renderDescription, 'videos');
   }
 
 }
