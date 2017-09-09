@@ -9,14 +9,11 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('videoPlaying', this.state.videoPlaying);
-
-
     return (
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search/>
+            <Search func={this.search} parent={this}/>
           </div>
         </nav>
         <div className="row">
@@ -28,16 +25,35 @@ class App extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   handleClick(parent) {
-    console.log('parent', parent);
-    console.log('this', this);
     parent.setState({
       videoPlaying: this
     });
   }
+
+  search() {
+    var searchString = document.querySelector('input').value || 'React JS';
+    var dataObj = {
+      'q': searchString,
+      'maxResults': '5',
+      'key': window.YOUTUBE_API_KEY,
+      'type': 'video',
+      'part': 'snippet',
+      'videoEmbeddable': 'true',
+    }
+    var changeState = (videos) => {
+      this.setState({
+        videoList: videos
+      });
+    };
+
+    window.searchYouTube(dataObj, changeState);
+
+  }
+
 }
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope
