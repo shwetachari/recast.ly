@@ -4,7 +4,8 @@ class App extends React.Component {
     this.state = {
       videoList: [],
       videoPlaying: {snippet: {title: '', description: ''}, id: {videoId: ''}},
-      videoPlayingDetails: {snippet: {title: '', description: '', channelTitle: '', publishedAt: ''}, statistics: {viewCount: '', likeCount: '', dislikeCount: ''}}
+      videoPlayingDetails: {snippet: {title: '', description: '', channelTitle: '', publishedAt: ''}, statistics: {viewCount: '', likeCount: '', dislikeCount: ''}},
+      autoplay: 0
     }
     this.search();
   }
@@ -19,15 +20,20 @@ class App extends React.Component {
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <VideoPlayer video={this.state.videoPlaying}/>
+            <VideoPlayer video={this.state.videoPlaying} autoplay={this.state.autoplay}/>
             <VideoDetails video={this.state.videoPlayingDetails}/>
           </div>
           <div className="col-md-5">
+            <button className={this.state.autoplay === 0 ? 'toggle' : 'toggle autoplayOn'} onClick={this.toggleAutoplay.bind(this)}>toggle autoplay</button>
             <VideoList videos={this.state.videoList} func={this.handleClick} parent={this}/>
           </div>
         </div>
       </div>
     );
+  }
+
+  toggleAutoplay() {
+    this.setState({autoplay: this.state.autoplay === 0 ? 1 : 0});
   }
 
   handleClick(parent) {
